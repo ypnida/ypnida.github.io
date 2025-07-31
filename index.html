@@ -16,57 +16,41 @@ interested in abstraction, interruption, and presence.
 currently based in SEOUL and LA.  
 <br><br>
 
-  <!-- 상단 / 하단 이미지를 세로로 쌓기 위한 두 개의 <img> -->
+  <!-- 상단 / 하단 이미지를 세로로 산기 위한 두 개의 <img> -->
   <img id="img-top" width="640" alt="top frame"><br>
   <img id="img-bottom" width="640" alt="bottom frame">
 
-  <!-- 1️⃣ data.js : generate_data.py 로 만든 이미지 메타데이터 -->
-  <script src="data.js"></script>
+  <!-- 1️⃣ data.js : generate_data.py 로 만들 이미지 메타데이터 -->
+  <script src="images/data.js"></script>
 
   <!-- 2️⃣ core logic -->
   <script>
-    // ▒▒▒  설정  ▒▒▒
     const MODES = ["colored", "mono"];
 
     function rand(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    //  한 섹션(top 또는 bottom)을 위한 무작위 경로 생성
     function randomSectionPath(isTop) {
-      // 1) colored | mono  중 선택
       const mode = rand(MODES);
-
-      // 2) vertical (1~3)  랜덤 선택 – 단, DATA 객체에 실제로 존재하는 키만
       const verticalKeys = Object.keys(DATA[mode]);
       const vertical = rand(verticalKeys);
-
-      // 3) hangle (1~5)  랜덤 선택 – 역시 존재하는 키만
       const hangleKeys = Object.keys(DATA[mode][vertical]);
       const hangle = rand(hangleKeys);
-
-      // 4) position : top 은 "1", bottom 은 "2"
       const pos = isTop ? "1" : "2";
-
-      // 5) 해당 폴더 안의 이미지 파일 중 하나 랜덤 선택
       const fileList = DATA[mode][vertical][hangle];
       const file = rand(fileList);
-
-      // 6) 완전한 상대 경로 반환 (index.html 기준)
-      const path = `images/cbrk/${mode}/${vertical}/${pos}/${hangle}/${file}`;
-      return path;
+      return `images/cbrk/${mode}/${vertical}/${pos}/${hangle}/${file}`;
     }
 
-    //  슬라이드 업데이트
     function updateFrames() {
-      document.getElementById("img-top").src    = randomSectionPath(true);
+      document.getElementById("img-top").src = randomSectionPath(true);
       document.getElementById("img-bottom").src = randomSectionPath(false);
     }
 
-    // 100 ms(= 10fps) 간격으로 스톱모션 업데이트
-    setInterval(updateFrames, 100);
-    updateFrames(); // 첫 프레임 즉시 렌더
-  </script>
+    setInterval(updateFrames, 250); // 4fps
+    updateFrames();
+  </script><br><br>
 
 contact  
 <br>
