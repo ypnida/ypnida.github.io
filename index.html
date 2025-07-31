@@ -35,12 +35,13 @@
       text-decoration: underline;
     }
     button {
+      all: unset; /* ✅ 브라우저 기본 버튼 스타일 완전 제거 */
+      display: inline-block; /* ✅ 없어지지 않도록 명시 */
       -webkit-tap-highlight-color: transparent; /* 모바일 터치 하이라이트 제거 */
-      -webkit-appearance: none;  /* iOS 기본 스타일 제거 */
-      appearance: none;          /* 다른 브라우저용 기본 제거 */
       padding: 8px 16px;
       border: 1px solid #333;
       background-color: white;
+      color: #071F02; /* ✅ 파란 글씨 방지: 기본 텍스트 색 강제 */
       font-family: 'IBM Plex Mono', monospace;
       font-size: 10px;
       cursor: pointer;
