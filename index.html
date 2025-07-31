@@ -5,8 +5,11 @@
   <title>ypnida</title>
   <script src="images/data.js"></script>
   <script src="imageCuts.js?v=1.2"></script>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=block" rel="stylesheet">
   <style>
+    body.loading {
+      visibility: hidden;
+    }
     html, body {
       height: 100%;
       margin: 0;
@@ -60,7 +63,7 @@
   </style>
 </head>
 
-<body>
+<body class="loading">
 
 ypnida  
 <br><br>
@@ -106,3 +109,8 @@ last update: july 2025
 
 </body>
 </html>
+<script>
+  window.addEventListener("load", () => {
+    document.body.classList.remove("loading");
+  });
+</script>
