@@ -25,10 +25,16 @@
     }
     a {
       color: inherit;
-      text-decoration: underline;
+      text-decoration: none;
       overflow-wrap: anywhere;
     }
+    a:hover {
+      text-decoration: underline;
+    }
     button {
+      -webkit-tap-highlight-color: transparent; /* 모바일 터치 하이라이트 제거 */
+      -webkit-appearance: none;  /* iOS 기본 스타일 제거 */
+      appearance: none;          /* 다른 브라우저용 기본 제거 */
       padding: 8px 16px;
       border: 1px solid #333;
       background-color: white;
@@ -79,11 +85,11 @@ currently based in SEOUL and LA.
   </span>
   <br>
   <span style="white-space: nowrap;">
-    ig → <a href="https://www.instagram.com/ypnida______/" style="text-decoration: underline; color: inherit;">ypnida______</a>
+    ig → <a href="https://www.instagram.com/ypnida______/" style="color: inherit;">ypnida______</a>
   </span>
   <br>
   <span style="white-space: nowrap;">
-    github → <a href="https://github.com/ypnida" style="text-decoration: underline; color: inherit;">github.com/ypnida</a>
+    github → <a href="https://github.com/ypnida" style="color: inherit;">github.com/ypnida</a>
   </span>
   <br><br>
 </div>
