@@ -46,7 +46,7 @@ function startLoop() {
     const now = Date.now();
     if (now - startTime >= ACTIVE_DURATION) {
       clearInterval(intervalId);
-      return; // 여기서 끝냄 (자동 반복 없음)
+      return; // 자동 반복 없
     }
 
     const modeTop = rand(MODES);
