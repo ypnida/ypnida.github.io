@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>ypnida</title>
   <script src="images/data.js"></script>
+  <script src="imageCuts.js"></script>
 </head>
 <body>
 
@@ -20,96 +21,6 @@ currently based in SEOUL and LA.
 <img id="img-top" width="320" alt="top frame"><br>
 <img id="img-bottom" width="320" alt="bottom frame">
 <br><br>
-
-<script>
-  const MODES = ["colored", "mono"];
-  const INTERVAL_MS = 120;
-  const ACTIVE_DURATION = 2000;
-  const REST_DURATION = 1500;
-
-  let hangleIndex = 0; // ✅ 순차적 hangle 인덱스
-
-  function rand(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function getHangleFromIndex(mode, vertical) {
-    const hangleKeys = Object.keys(DATA[mode][vertical]);
-    if (hangleKeys.length === 0) return null;
-
-    const hangle = hangleKeys[hangleIndex % hangleKeys.length];
-    return hangle;
-  }
-
-  function getRandomPath(mode, pos, vertical, hangle) {
-    const fileList = DATA[mode][vertical][hangle]?.[pos];
-    if (!fileList || fileList.length === 0) return "";
-    const file = rand(fileList);
-    return `images/cbrk/${mode}/${vertical}/${pos}/${hangle}/${file}`;
-  }
-
-  function preloadImages(urls, callback) {
-    let loaded = 0;
-    const total = urls.length;
-    const images = [];
-
-    urls.forEach((url, index) => {
-      const img = new Image();
-      img.onload = () => {
-        loaded++;
-        if (loaded === total) callback(images);
-      };
-      img.src = url;
-      images[index] = img;
-    });
-  }
-
-  function startLoop() {
-    function runActivePhase() {
-      const startTime = Date.now();
-
-      const intervalId = setInterval(() => {
-        const now = Date.now();
-        if (now - startTime >= ACTIVE_DURATION) {
-          clearInterval(intervalId);
-          setTimeout(runActivePhase, REST_DURATION);
-          return;
-        }
-
-        const modeTop = rand(MODES);
-        const modeBottom = rand(MODES);
-
-        // 랜덤 vertical 선택
-        const verticalKeys = Object.keys(DATA[modeTop]);
-        const vertical = rand(verticalKeys);
-
-        // 순차적 hangle 선택 (modeTop 기준으로 돌림)
-        const hangle = getHangleFromIndex(modeTop, vertical);
-        if (!hangle) return; // 유효한 hangle 없으면 skip
-
-        const topPath = getRandomPath(modeTop, "1", vertical, hangle);
-        const bottomPath = getRandomPath(modeBottom, "2", vertical, hangle);
-
-        preloadImages([topPath, bottomPath], ([topImg, bottomImg]) => {
-          document.getElementById("img-top").src = topImg.src;
-          document.getElementById("img-bottom").src = bottomImg.src;
-        });
-
-        hangleIndex++; // ✅ 다음 hangle로 이동
-
-      }, INTERVAL_MS);
-    }
-
-    runActivePhase();
-  }
-
-  startLoop();
-</script>
-
-
-
-
-
 
 <br><br>
 contact  
