@@ -40,39 +40,63 @@ function preloadImages(urls, callback) {
 }
 
 function startLoop() {
-  function runActivePhase() {
-    const startTime = Date.now();
+  const startTime = Date.now();
 
-    const intervalId = setInterval(() => {
-      const now = Date.now();
-      if (now - startTime >= ACTIVE_DURATION) {
-        clearInterval(intervalId);
-        setTimeout(runActivePhase, REST_DURATION);
-        return;
-      }
+  const intervalId = setInterval(() => {
+    const now = Date.now();
+    if (now - startTime >= ACTIVE_DURATION) {
+      clearInterval(intervalId);
+      return; // 여기서 끝냄 (자동 반복 없음)
+    }
 
-      const modeTop = rand(MODES);
-      const modeBottom = rand(MODES);
+    const modeTop = rand(MODES);
+    const modeBottom = rand(MODES);
 
-      const verticalKeys = Object.keys(DATA[modeTop]);
-      const vertical = rand(verticalKeys);
+    const verticalKeys = Object.keys(DATA[modeTop]);
+    const vertical = rand(verticalKeys);
 
-      const hangle = getHangleFromIndex(modeTop, vertical);
-      if (!hangle) return;
+    const hangle = getHangleFromIndex(modeTop, vertical);
+    if (!hangle) return;
 
-      const topPath = getRandomPath(modeTop, "1", vertical, hangle);
-      const bottomPath = getRandomPath(modeBottom, "2", vertical, hangle);
+    const topPath = getRandomPath(modeTop, "1", vertical, hangle);
+    const bottomPath = getRandomPath(modeBottom, "2", vertical, hangle);
 
-      preloadImages([topPath, bottomPath], ([topImg, bottomImg]) => {
-        document.getElementById("img-top").src = topImg.src;
-        document.getElementById("img-bottom").src = bottomImg.src;
-      });
+    preloadImages([topPath, bottomPath], ([topImg, bottomImg]) => {
+      document.getElementById("img-top").src = topImg.src;
+      document.getElementById("img-bottom").src = bottomImg.src;
+    });
 
-      hangleIndex++;
-    }, INTERVAL_MS);
-  }
-
-  runActivePhase();
+    hangleIndex++;
+  }, INTERVAL_MS);
 }
 
-startLoop();
+//startLoop();
+
+function loadInitialImages() {
+  const modeTop = rand(MODES);
+  const modeBottom = rand(MODES);
+
+  const verticalKeys = Object.keys(DATA[modeTop]);
+  const vertical = rand(verticalKeys);
+
+  const hangle = getHangleFromIndex(modeTop, vertical);
+  if (!hangle) return;
+
+  const topPath = getRandomPath(modeTop, "1", vertical, hangle);
+  const bottomPath = getRandomPath(modeBottom, "2", vertical, hangle);
+
+  preloadImages([topPath, bottomPath], ([topImg, bottomImg]) => {
+    document.getElementById("img-top").src = topImg.src;
+    document.getElementById("img-bottom").src = bottomImg.src;
+  });
+
+  hangleIndex++;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadInitialImages();
+
+  document.getElementById("trigger-button").addEventListener("click", () => {
+    startLoop();
+  });
+});
