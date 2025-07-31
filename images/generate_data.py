@@ -1,7 +1,6 @@
 import os, json
 
-# ✅ 현재 스크립트가 images/ 안에 있을 때의 BASE 경로
-BASE = os.path.abspath("cbrk")
+BASE = os.path.abspath("cbrk")  # 🔧 images/ 폴더 안에 있는 상태에서 실행해야 함
 MODES = ["colored", "mono"]
 VERTICALS = ["1", "2", "3"]
 HANGLES = ["1", "2", "3", "4", "5"]
@@ -20,17 +19,23 @@ for mode in MODES:
                 print("CHECKING:", sample_path)
                 if os.path.exists(sample_path):
                     file_list = os.listdir(sample_path)
-                    print("📂 Found in folder:", file_list)
+
+                    # ✅ 유효한 이미지 파일만 필터링
                     files = sorted([
                         f for f in file_list
-                        if f.lower().strip().endswith((".jpg", ".jpeg", ".png", ".webp")) and not f.startswith("._")
+                        if f.lower().endswith((".png", ".jpg", ".jpeg", ".webp"))
+                        and not f.startswith("._")  # 맥에서 생긴 임시파일 제거
+                        and not f.startswith(".DS")  # DS_Store 제거
+                        and not f.startswith(".")    # 다른 숨김파일 제거
                     ])
+
                     if files:
                         output[mode][vertical][hangle] = files
                         found = True
                         break
+
             if not found:
-                print(f"⚠️ No images found in {mode}/{vertical}/{{1,2}}/{hangle}")
+                print(f"⚠️ No valid images in {mode}/{vertical}/{{1,2}}/{hangle}")
 
 # 저장
 with open("data.js", "w", encoding="utf-8") as f:
