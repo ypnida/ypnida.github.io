@@ -35,17 +35,19 @@
       text-decoration: underline;
     }
     button {
-      all: unset; /* ✅ 브라우저 기본 버튼 스타일 완전 제거 */
-      display: inline-block; /* ✅ 없어지지 않도록 명시 */
-      -webkit-tap-highlight-color: transparent; /* 모바일 터치 하이라이트 제거 */
+      all: unset;
+      display: inline-block;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       padding: 8px 16px;
       border: 3px solid #b3c7b836;
       background-color: white;
-      color: #071F02; /* ✅ 파란 글씨 방지: 기본 텍스트 색 강제 */
+      color: #071F02;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: transform 0.2s ease;
+      transform: scale(1); /* ✅ 기본 스케일 명시 */
       border-radius: 2px;
       margin-top: 16px;
     }
