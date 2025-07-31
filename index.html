@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>ypnida</title>
+  <script src="images/data.js"></script>
 </head>
 <body>
 
@@ -16,47 +17,106 @@ interested in abstraction, interruption, and presence.
 currently based in SEOUL and LA.  
 <br><br>
 
-  <!-- 상단 / 하단 이미지를 세로로 산기 위한 두 개의 <img> -->
-  <img id="img-top" width="640" alt="top frame"><br>
-  <img id="img-bottom" width="640" alt="bottom frame">
+<img id="img-top" width="320" alt="top frame"><br>
+<img id="img-bottom" width="320" alt="bottom frame">
+<br><br>
 
-  <!-- 1️⃣ data.js : generate_data.py 로 만들 이미지 메타데이터 -->
-  <script src="images/data.js"></script>
+<script>
+  const MODES = ["colored", "mono"];
+  const INTERVAL_MS = 120;
+  const ACTIVE_DURATION = 2000;
+  const REST_DURATION = 1500;
 
-  <!-- 2️⃣ core logic -->
-  <script>
-    const MODES = ["colored", "mono"];
+  let hangleIndex = 0; // ✅ 순차적 hangle 인덱스
 
-    function rand(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
+  function rand(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function getHangleFromIndex(mode, vertical) {
+    const hangleKeys = Object.keys(DATA[mode][vertical]);
+    if (hangleKeys.length === 0) return null;
+
+    const hangle = hangleKeys[hangleIndex % hangleKeys.length];
+    return hangle;
+  }
+
+  function getRandomPath(mode, pos, vertical, hangle) {
+    const fileList = DATA[mode][vertical][hangle]?.[pos];
+    if (!fileList || fileList.length === 0) return "";
+    const file = rand(fileList);
+    return `images/cbrk/${mode}/${vertical}/${pos}/${hangle}/${file}`;
+  }
+
+  function preloadImages(urls, callback) {
+    let loaded = 0;
+    const total = urls.length;
+    const images = [];
+
+    urls.forEach((url, index) => {
+      const img = new Image();
+      img.onload = () => {
+        loaded++;
+        if (loaded === total) callback(images);
+      };
+      img.src = url;
+      images[index] = img;
+    });
+  }
+
+  function startLoop() {
+    function runActivePhase() {
+      const startTime = Date.now();
+
+      const intervalId = setInterval(() => {
+        const now = Date.now();
+        if (now - startTime >= ACTIVE_DURATION) {
+          clearInterval(intervalId);
+          setTimeout(runActivePhase, REST_DURATION);
+          return;
+        }
+
+        const modeTop = rand(MODES);
+        const modeBottom = rand(MODES);
+
+        // 랜덤 vertical 선택
+        const verticalKeys = Object.keys(DATA[modeTop]);
+        const vertical = rand(verticalKeys);
+
+        // 순차적 hangle 선택 (modeTop 기준으로 돌림)
+        const hangle = getHangleFromIndex(modeTop, vertical);
+        if (!hangle) return; // 유효한 hangle 없으면 skip
+
+        const topPath = getRandomPath(modeTop, "1", vertical, hangle);
+        const bottomPath = getRandomPath(modeBottom, "2", vertical, hangle);
+
+        preloadImages([topPath, bottomPath], ([topImg, bottomImg]) => {
+          document.getElementById("img-top").src = topImg.src;
+          document.getElementById("img-bottom").src = bottomImg.src;
+        });
+
+        hangleIndex++; // ✅ 다음 hangle로 이동
+
+      }, INTERVAL_MS);
     }
 
-    function randomSectionPath(isTop) {
-      const mode = rand(MODES);
-      const verticalKeys = Object.keys(DATA[mode]);
-      const vertical = rand(verticalKeys);
-      const hangleKeys = Object.keys(DATA[mode][vertical]);
-      const hangle = rand(hangleKeys);
-      const pos = isTop ? "1" : "2";
-      const fileList = DATA[mode][vertical][hangle];
-      const file = rand(fileList);
-      return `images/cbrk/${mode}/${vertical}/${pos}/${hangle}/${file}`;
-    }
+    runActivePhase();
+  }
 
-    function updateFrames() {
-      document.getElementById("img-top").src = randomSectionPath(true);
-      document.getElementById("img-bottom").src = randomSectionPath(false);
-    }
+  startLoop();
+</script>
 
-    setInterval(updateFrames, 250); // 4fps
-    updateFrames();
-  </script><br><br>
 
+
+
+
+
+<br><br>
 contact  
 <br>
 email → ypnida7508@email.com  
 <br>
-ig → <a href="https://www.instagram.com/ypnida______/">ypnida______</a>
+ig → <a href="https://www.instagram.com/ypnida______/">ypnida______</a>  
 <br>
 github → <a href="https://github.com/ypnida">github.com/ypnida</a>  
 <br><br>
