@@ -11,20 +11,26 @@
       visibility: hidden;
     }
     html, body {
-      height: 100%;
       margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      height: auto;
     }
+
     body {
       display: flex;
-      justify-content: center;     /* 수평 정렬 */
-      align-items: center;         /* 수직 정렬 */
       flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
       text-align: center;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 16px;
       line-height: 1.5;
       background-color: #FFFFFF;
       color: #071F02;
+      overflow-x: hidden;
+      padding-top: 40px;
+      padding-bottom: 40px;
     }
     a {
       color: inherit;
